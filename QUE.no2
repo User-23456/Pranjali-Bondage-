@@ -1,0 +1,58 @@
+#include <stdio.h>
+
+void dist_sort(int x[], int n, int z) {
+
+ int i, j, temp;
+
+ // Bubble sort based on absolute distance from z
+
+ for (i = 0; i < n - 1; i++) {
+
+ for (j = 0; j < n - i - 1; j++) {
+
+ if (abs(x[j] - z) > abs(x[j + 1] - z)) {
+
+ // Swap elements
+
+ temp = x[j];
+
+ x[j] = x[j + 1];
+
+ x[j + 1] = temp;
+
+ }
+
+ }
+
+ }
+
+}
+
+int main() {
+
+ int x[] = {9, 1, 12, 4, 2};
+
+ int n = sizeof(x) / sizeof(x[0]);
+
+ int z = 6;
+printf("Original array: ");
+
+ for (int i = 0; i < n; i++) {
+
+ printf("%d ", x[i]);
+
+ }
+
+ dist_sort(x, n, z);
+
+ printf("\nSorted array: ");
+
+ for (int i = 0; i < n; i++) {
+
+ printf("%d ", x[i]);
+
+ }
+
+ return 0;
+
+}
