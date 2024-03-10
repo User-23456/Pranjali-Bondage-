@@ -1,0 +1,61 @@
+#include <stdio.h>
+typedef struct {
+int id;
+int size;
+} Job;
+#define MAX_SIZE 100
+typedef struct {
+Job jobs[MAX_SIZE];
+int front;
+int rear;
+} JobQueue;
+int empty(const JobQueue* queue);
+void enqueue(JobQueue* queue, const Job* job);
+Job front(const JobQueue* queue);
+void dequeue(JobQueue* queue);
+void roundRobin(JobQueue* queue, int timeSlice);
+int empty(const JobQueue* queue) {
+return queue->front == queue->rear;
+}
+void enqueue(JobQueue* queue, const Job* job) {
+if ((queue->rear + 1) % MAX_SIZE == queue->front) {
+printf("Queue overflow! Cannot enqueue more jobs.\n");
+return;
+}
+queue->jobs[queue->rear] = *job;
+queue->rear = (queue->rear + 1) % MAX_SIZE;
+}
+Job front(const JobQueue* queue) {
+if (empty(queue)) {
+return (Job) {-1, 0};
+}
+return queue->jobs[queue->front];
+}
+void dequeue(JobQueue* queue) {
+if (empty(queue)) {
+printf("Queue is empty! Cannot dequeue.\n");
+return;
+}
+queue->front = (queue->front + 1) % MAX_SIZE;
+}
+void roundRobin(JobQueue* queue, int timeSlice) {
+while (!empty(queue)) {
+Job currentJob = front(queue);
+int timeProcessed = (timeSlice < currentJob.size) ? timeSlice : currentJob.size;
+printf("Processing Job %d for %d units of time.\n", currentJob.id,
+timeProcessed);
+currentJob.size -= timeProcessed;
+if (currentJob.size > 0) {
+enqueue(queue, &currentJob);
+}
+dequeue(queue);
+}
+}
+int main() {
+JobQueue jobQueue = {{}, 0, 0};
+enqueue(&jobQueue, &(Job){1, 5});
+enqueue(&jobQueue, &(Job){2, 8});
+enqueue(&jobQueue, &(Job){3, 3});
+roundRobin(&jobQueue, 4);
+return 0;
+}
