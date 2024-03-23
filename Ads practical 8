@@ -1,0 +1,69 @@
+import java.util.Scanner; class Node {
+int data;
+Node left, right;
+Node(int value) { data = value;
+left = right = null;
+}
+}
+public class BinarySearchTree { Node root;
+BinarySearchTree() { root = null;
+}
+void insert(int key) {
+root = insertRec(root, key);
+}
+Node insertRec(Node root, int key) { if (root == null) {
+root = new Node(key); return root;
+}
+if (key < root.data)
+root.left = insertRec(root.left, key); else if (key > root.data)
+root.right = insertRec(root.right, key);
+return root;
+}
+void inorder(Node root) { if (root != null) {
+inorder(root.left); System.out.print(root.data + " "); inorder(root.right);
+}
+}
+void preorder(Node root) { if (root != null) {
+System.out.print(root.data + " "); preorder(root.left); preorder(root.right);
+}
+}
+void postorder(Node root) { if (root != null) {
+
+postorder(root.left); postorder(root.right); System.out.print(root.data + " ");
+}
+}
+boolean search(Node root, int key) { if (root == null || root.data == key)
+return root != null;
+if (root.data < key)
+return search(root.right, key);
+return search(root.left, key);
+}
+public static void main(String[] args) { Scanner scanner = new Scanner(System.in);
+BinarySearchTree bst = new BinarySearchTree();
+// Create BST
+int[] elements = {6, 9, 5, 2, 8, 15, 24, 14, 7, 8, 5, 2};
+for (int element : elements) bst.insert(element);
+int choice, key; boolean loop = true; while (loop) {
+System.out.println("\nBinary Search Tree Operations:"); System.out.println("1. Inorder Traversal"); System.out.println("2. Preorder Traversal"); System.out.println("3. Postorder Traversal"); System.out.println("4. Search for element"); System.out.println("5. Exit");
+System.out.print("Enter your choice: "); choice = scanner.nextInt();
+
+switch (choice) { case 1:
+System.out.print("Inorder Traversal: "); bst.inorder(bst.root);
+break; case 2:
+System.out.print("Preorder Traversal: "); bst.preorder(bst.root);
+break; case 3:
+System.out.print("Postorder Traversal: "); bst.postorder(bst.root);
+break; case 4:
+System.out.print("Enter element to search: "); key = scanner.nextInt();
+if (bst.search(bst.root, key))
+System.out.println("Element found in the BST."); else
+System.out.println("Element not found in the BST."); break;
+case 5:
+loop = false; break;
+default:
+System.out.println("Invalid choice!");
+}
+}
+scanner.close();
+}
+}
